@@ -13,7 +13,33 @@ def read_file():
         list_of_tuples = list(map(tuple, csv_reader))
         # display all rows of csv
         return list_of_tuples
-
+def formula(tuples):
+    newlist = []
+    dictionary = {}
+    newlist.append(tuples[0])
+    tuples = tuples[1:]
+    for tup in tuples:
+        x = tup
+        y = list(x)
+        for i in range(len(tup)):
+            if i == 0:
+                pass
+            elif i == 1:
+                y[1] = int(x[1])*2
+            elif i == 2:
+                y[2] = int(int(x[2])*3)
+            elif i == 3:
+                y[3] = int(x[3])*5
+        x = tuple(y)
+        total_score = int(x[1]) + int(x[2]) + int(x[3])
+        print(f'{x[0]}: {total_score}')
+        dictionary[x[0]] = total_score
+        newlist.append(x)
+        print(dictionary)
+        print({k: v for k, v in sorted(dictionary.items(), key = lambda item: item[1], reverse=True)})
+        print()
+    print(newlist)
+    return dictionary
 
 
 if __name__ == "__main__":
