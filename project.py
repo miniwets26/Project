@@ -13,6 +13,7 @@ def read_file():
         list_of_tuples = list(map(tuple, csv_reader))
         # display all rows of csv
         return list_of_tuples
+
 def formula(tuples):
     newlist = []
     dictionary = {}
@@ -41,6 +42,12 @@ def formula(tuples):
     print(newlist)
     return dictionary
 
+def updated_list(dictionary):
+    with open('Testing.txt', 'w') as files:
+        dictionary = {k: v for k, v in sorted(dictionary.items(), key = lambda item: item[1], reverse=True)}
+        dictionary = str(dictionary)
+        files.write(dictionary)
+        files.close()
 
 if __name__ == "__main__":
     main()
