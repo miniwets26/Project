@@ -48,6 +48,12 @@ def updated_list(dictionary):
         dictionary = str(dictionary)
         files.write(dictionary)
         files.close()
+def email_list():
+    f = open('email_list.txt', 'r') # open the file
+    emails = f.readlines() # returns one string per file line
+    for email in emails:
+        send_email(email) # prints each line
+    f.close()
 
 if __name__ == "__main__":
     main()
