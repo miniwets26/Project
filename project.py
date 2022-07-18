@@ -49,12 +49,17 @@ def updated_list(dictionary):
         files.write(dictionary)
         files.close()
 def email_list():
+    pattern =  r"(\d+)?(\w+)@(\w+)\.(\w+)"
     f = open('email_list.txt', 'r') # open the file
     emails = f.readlines() # returns one string per file line
     for email in emails:
-        send_email(email) # prints each line
+        result = re.match(pattern, email)
+        if not result:
+            print("Invalid email address")
+            continue
+        elif result:
+            send_email(email) # prints each line
     f.close()
-
 def send_email(email):
     mail_content = '''Hello,
     Please see attachment for the current task listing.
