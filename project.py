@@ -55,5 +55,41 @@ def email_list():
         send_email(email) # prints each line
     f.close()
 
+def send_email(email):
+    mail_content = '''Hello,
+    Please see attachment for the current task listing.
+    Once your current task is completed please email back saying its completed.
+    Thank You
+    '''
+    #The mail addresses and password
+    sender_address = os.getenv("email_address")
+    """ Input your app password for sender_pass"""
+    sender_pass = os.getenv("password")
+    receiver_address = email # this will be a recieving list 
+    #Setup the MIME
+    message = MIMEMultipart()
+    message['From'] = sender_address
+    message['To'] = receiver_address
+    message['Subject'] = 'This is an updated task list. Please work your way left to right unless otherwise instructed.'
+    #The subject line
+    #The body and the attachments for the mail
+    message.attach(MIMEText(mail_content, 'plain'))
+    attach_file_name = 'TP_python_prev.pdf'
+    attach_file = open('Tasklist.txt', 'rb') # Open the file as binary mode
+    payload = MIMEBase('application', 'octate-stream', name = 'Tasklist.txt')
+    payload.set_payload((attach_file).read())
+    encoders.encode_base64(payload) #encode the attachment
+    #add payload header with filename
+    payload.add_header('Content-Decomposition', 'attachment', filename=attach_file_name)
+    message.attach(payload)
+    #Create SMTP session for sending the mail
+    session = smtplib.SMTP('smtp.gmail.com', 587) #use gmail with port
+    session.starttls() #enable security
+    session.login(sender_address, sender_pass) #login with mail_id and password
+    text = message.as_string()
+    session.sendmail(sender_address, receiver_address, text)
+    session.quit()
+    print('Mail Sent')
+
 if __name__ == "__main__":
     main()
