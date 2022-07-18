@@ -91,5 +91,24 @@ def send_email(email):
     session.quit()
     print('Mail Sent')
 
+def main():
+    readfile = read_file()
+    z = formula(readfile)
+    updated_list(z)
+    print("Done")
+    email_list()
+    while True:
+    # Removing the date and microseconds from the full format
+        t = str(datetime.datetime.now())[7:-7]
+        if t == "07:00:00":
+            email_list()
+            # Wait, so it doesn't trigger the function more times
+            time.sleep(1)
+            break
+        else:
+            print("Not time yet!")
+            break
+        
+
 if __name__ == "__main__":
     main()
