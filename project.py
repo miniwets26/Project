@@ -1,8 +1,33 @@
 #!/user/bin/env python3
+import os
 import re
+import sys
 import csv
+import time 
+import sched
+import psutil
+import shutil
+import logging
+import smtplib
+import datetime
+import smtplib, ssl
+import datetime as dt
 from csv import reader
-def main():
+from email import encoders
+from dotenv import load_dotenv
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+from email.message import EmailMessage
+from email.mime.multipart import MIMEMultipart
+
+load_dotenv()
+
+def stats():
+    print('The CPU usage is: ', psutil.cpu_percent(4))
+    print('RAM memory % used:', psutil.virtual_memory()[2])
+    path = 'C:\\Users\\Jorda\\OneDrive\\Desktop\\VSCode\\New folder\\Capstone\\project.py'
+    print(f'{"Disk usage statistics:"}  {shutil.disk_usage(path)}')
+    return True
 
 # open file in read mode
 def read_file():
@@ -18,6 +43,7 @@ def formula(tuples):
     newlist = []
     dictionary = {}
     newlist.append(tuples[0])
+    # Identify/focus on tuples after header 
     tuples = tuples[1:]
     for tup in tuples:
         x = tup
@@ -36,10 +62,9 @@ def formula(tuples):
         print(f'{x[0]}: {total_score}')
         dictionary[x[0]] = total_score
         newlist.append(x)
-        print(dictionary)
-        print({k: v for k, v in sorted(dictionary.items(), key = lambda item: item[1], reverse=True)})
+        
         print()
-    print(newlist)
+    
     return dictionary
 
 def updated_list(dictionary):
@@ -47,15 +72,15 @@ def updated_list(dictionary):
         dictionary = {k: v for k, v in sorted(dictionary.items(), key = lambda item: item[1], reverse=True)}
         dictionary = str(dictionary)
         files.write(dictionary)
-        files.close()
+
 def email_list():
-    pattern =  r"(\d+)?(\w+)@(\w+)\.(\w+)"
+    pattern =  r"(\w+)?\+?(\w+)@(\w+)\.(\w+)"
     f = open('email_list.txt', 'r') # open the file
     emails = f.readlines() # returns one string per file line
     for email in emails:
         result = re.match(pattern, email)
         if not result:
-            print("Invalid email address")
+            print(f"{email} is an invalid email address")
             continue
         elif result:
             send_email(email) # prints each line
@@ -97,11 +122,12 @@ def send_email(email):
     print('Mail Sent')
 
 def main():
+    stats()
     readfile = read_file()
     z = formula(readfile)
     updated_list(z)
     print("Done")
-    email_list()
+    email_list(email_list.txt)
     while True:
     # Removing the date and microseconds from the full format
         t = str(datetime.datetime.now())[7:-7]
